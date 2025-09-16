@@ -5,19 +5,21 @@ class Tool {
   final String description;
   final Future<String> Function(Map<String, dynamic>) function;
   List<Parameter> parameters;
+  final bool noNeedForAi;
 
   Tool({
     required this.name,
     required this.description,
     required this.function,
     this.parameters = const [],
+    this.noNeedForAi=false,
   });
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'description': description,
-    'parameters': parameters.map((p) => p.toJson()).toList(),
-  };
+        'name': name,
+        'description': description,
+        'parameters': parameters.map((p) => p.toJson()).toList(),
+      };
 
   Future<String> call(Map<String, dynamic> arguments) async {
     return await function(arguments);

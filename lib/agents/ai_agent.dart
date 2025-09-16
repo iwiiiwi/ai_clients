@@ -17,8 +17,8 @@ class AiAgent {
     this.tools = const [],
     Logger? logger,
     List<Message>? history,
-  }) : _history = history ?? [],
-       _logger = logger ?? Logger() {
+  })  : _history = history ?? [],
+        _logger = logger ?? Logger() {
     _logger.agentLog(
       LogLevel.debug,
       'Agent initialized',
@@ -26,7 +26,8 @@ class AiAgent {
     );
   }
 
-  Future<Message> sendMessage(Message message, {List<Context> context = const []}) async {
+  Future<Message> sendMessage(Message message,
+      {List<Context> context = const []}) async {
     AiClientResponse response = await client.query(
       system: description,
       history: _history,
@@ -52,11 +53,15 @@ class AiAgent {
 
       final toolCalls = (jsonDecode(response.rawMessage!) as List);
 
-      final toolCallMessages = await client.makeToolCalls(tools: tools, toolCalls: toolCalls);
+      final toolCallMessages =
+          await client.makeToolCalls(tools: tools, toolCalls: toolCalls);
       final lastMessage = toolCallMessages.removeLast();
       _history.addAll(toolCallMessages);
-
-      responseMessage = await sendMessage(lastMessage);
+      if (!lastMessage.noNeedForAi) {
+        responseMessage = await sendMessage(lastMessage);
+      } else {
+        responseMessage = Message.assistant(response.message ?? "");
+      }
     } else {
       responseMessage = Message.assistant(response.message!);
       addIntoHistory(responseMessage);

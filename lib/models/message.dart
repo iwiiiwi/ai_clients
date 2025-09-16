@@ -34,7 +34,8 @@ class ToolCallMessage extends Message {
 }
 
 class ToolResultMessage extends Message {
-  ToolResultMessage({required super.id, required super.content}) : super(type: MessageType.toolResult);
+  final bool noNeedForAi;
+  ToolResultMessage({required super.id, required super.content,this.noNeedForAi=false}) : super(type: MessageType.toolResult);
 }
 
 enum MessageType {
