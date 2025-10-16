@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ai_clients/models.dart';
 import 'package:ai_clients/logging/logging.dart';
+import 'package:mcp_llm/mcp_llm.dart' as llm;
 
 abstract class AiClient {
   final Duration? delay;
@@ -45,7 +46,18 @@ abstract class AiClient {
     List<Tool> tools = const [],
   });
 
-  Future<List<ToolResultMessage>> makeToolCalls({required List<Tool> tools, required List toolCalls});
+  Stream<llm.LlmResponseChunk> streamQuery({
+    required Message message,
+    List<Message> history = const [],
+    String? system,
+    String? model,
+    Duration? delay,
+    List<Context>? contexts,
+    List<Tool> tools = const [],
+  });
+
+  Future<List<ToolResultMessage>> makeToolCalls(
+      {required List<Tool> tools, required List toolCalls});
 
   /// Logs a request being sent to the AI provider.
   void logRequest(Map<String, dynamic> data) {

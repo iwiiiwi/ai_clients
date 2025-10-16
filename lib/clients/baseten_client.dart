@@ -4,6 +4,7 @@ import 'package:ai_clients/clients/ai_client.dart';
 import 'package:ai_clients/models.dart';
 import 'package:ai_clients/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:mcp_llm/mcp_llm.dart' as llm;
 
 class BasetenClient extends AiClient {
   final Dio _dio;
@@ -247,5 +248,17 @@ class BasetenClient extends AiClient {
     } else {
       throw Exception('No response from ChatGPT API.');
     }
+  }
+
+  Stream<llm.LlmResponseChunk> streamQuery({
+    required Message message,
+    List<Message> history = const [],
+    String? system,
+    String? model,
+    Duration? delay,
+    List<Context>? contexts,
+    List<Tool> tools = const [],
+  }) async* {
+
   }
 }

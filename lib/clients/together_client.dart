@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ai_clients/ai_clients.dart';
 import 'package:dio/dio.dart';
+import 'package:mcp_llm/mcp_llm.dart' as llm;
 
 class TogetherClient extends AiClient {
   final Dio _dio;
@@ -200,5 +201,18 @@ class TogetherClient extends AiClient {
     } else {
       throw Exception('No response from ChatGPT API.');
     }
+  }
+
+
+  Stream<llm.LlmResponseChunk> streamQuery({
+    required Message message,
+    List<Message> history = const [],
+    String? system,
+    String? model,
+    Duration? delay,
+    List<Context>? contexts,
+    List<Tool> tools = const [],
+  }) async* {
+
   }
 }
